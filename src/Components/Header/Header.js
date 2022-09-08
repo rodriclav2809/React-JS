@@ -2,22 +2,37 @@ import React from 'react'
 import logo from '../../assets/logoecommerce.jpg'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { blue } from '@mui/material/colors';
-import "./Header.css"
+import { Nav } from './Nav/Nav';
 
 
-const Header = () => {
+const Header = ({ name, surname, id, children }) => {
+
+    const categorias = [
+        { id: 0, nombre: 'Categoria 1' },
+        { id: 1, nombre: 'Categoria 2' },
+        { id: 2, nombre: 'Categoria 3' },
+        { id: 3, nombre: 'Categoria 4' },
+    ]
+
     return (
-        <header>
-            <img src={logo} alt="logo" />
-            <h1>Mi Tienda</h1>
-            <nav>
-                <a href="">Categoria 1</a>
-                <a href="">Categoria 2</a>
-                <a href="">Categoria 3</a>
-            </nav>
-            <ShoppingCartIcon sx={{ color: blue[900] }} sx={{ fontSize: 60 }} />
+        <header style={styles.container}>
+            <img style={styles.imagen} src={logo} alt="logo" />
+            <h1>Welcome {name}</h1>
+            <Nav categorias={categorias}/>
+            <ShoppingCartIcon color="success" fontSize="large" />
         </header>
     )
+}
+
+const styles = {
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    imagen: {
+        width: '10%',
+    },
 }
 
 export default Header
