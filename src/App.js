@@ -1,19 +1,24 @@
-import React from "react";
-import Header from "./Components/Header/Header.js";
-import { Button } from "./Components/Button";
-import { Title } from "./Components/Title";
+import React, {useState} from "react";
+import Navbar from "./Components/Navbar/Navbar"
+import ItemListContainer from "./Containers/ItemListContainer/ItemListContainer";
+import MiComponente from "./MiComponente";
 
 const App = () => {
 
-  const Username = "Rodrigo"
-  const Usersurname = "Clavijo"
+  const dash = "Las mejores ofertas";
+
+  const [show, setShow] = useState(true);
+
+  const alternar = () =>{
+    setShow(!show);
+  }
 
   return (
     <>
-      <Header name={Username} id="1" surname={Usersurname}>
-        <button />
-        <title />
-      </Header>
+      <Navbar />
+      <ItemListContainer greeting={dash}/>
+      {show ? <MiComponente/> : <h1>No hay nada</h1>}
+      <button onClick={alternar}>Alternar</button>
     </>
   )
 }
