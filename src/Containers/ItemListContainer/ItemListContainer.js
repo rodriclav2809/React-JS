@@ -1,38 +1,51 @@
-import React, {useState, useEffect} from 'react'
-import ItemCount from '../../Components/ItemCount'
-
-const initialProducts = [
-  {name:"Teclados", id:0, price:200, stock: 20},
-  {name:"Mouses", id:1, price:300, stock: 10},
-  {name:"Monitores", id:2, price:400, stock: 15},
-  {name:"Audifonos", id:3, price:200, stock: 20},
-]
-
-const promesa = new Promise((res,rej) =>{
-  res(initialProducts)
-})
+import React, { useState, useEffect } from "react";
+import { ItemList } from "./ItemList";
+import { CircularProgress } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { API } from "../../constants/api";
 
 const ItemListContainer = ({ greeting }) => {
 
-const [products, setProducts] = useState([]);
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    promesa
-    .then((data)=>{setProducts(data)})
-    .catch(()=>{console.log("esta todo mal")})
-  }, [])
-  
-  const onAdd = (count) => {
-    console.log(`Se agregan ${count} productos`);
-  }
+    const url = id ? `${API.CATEGORY}${id}` : API.LIST;
+    const getItems = async () => {
+      try {
+        const respuesta = await fetch(url);
+        const data = await respuesta.json();
+        setProducts(data);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItems();
+  }, [id]);
 
   return (
     <>
-      <h1>{greeting}</h1>
-      <ItemCount initial={1} stock={5} onAdd={onAdd} />
-      {products.map((product) => <h2 key={product.id}>{product.name}</h2>)}
+      <h1 style={styles.dash}>{greeting}</h1>
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <h1>Ocurrio un error</h1>
+      ) : (
+        <ItemList products={products} />
+      )}
     </>
-  )
+  );
+};
+
+const styles = {
+  dash: {
+    textAlign: 'center'
+  }
 }
 
-export default ItemListContainer
+export default ItemListContainer;
