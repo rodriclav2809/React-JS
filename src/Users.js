@@ -1,28 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import { UserList } from "./UserList";
 
-const Usuarios = () => {
+export const Users = () => {
+  const [user, setUser] = useState("");
+  const [users, setUsers] = useState([]);
 
-    const [usuarios, setUsuarios] = useState([{ nombre: 'La Blanca' }, { nombre: 'Bolso' }])
+  const handlerChange = (e) => {
+    setUser(e.target.value);
+  };
 
-    console.log(usuarios);
+  const handlerClick = () => {
+    setUsers([...users, user]);
+  };
 
-    const rodrigo = {nombre:'Rodrigo'};
+  const deleteUser = (userD) => {
+    const filtrado = users.filter((user) => {
+      return user !== userD;
+    });
+    setUsers(filtrado);
+  };
 
-    const agregarRodrigo = () => {
-        setUsuarios([...usuarios,rodrigo]);
-    }
-
-    return (
-        <>
-            <h1>Usuarios</h1>
-            <button onClick={agregarRodrigo}>Agregar a Rodrigo</button>
-            <ul>
-                {usuarios.map((usuario,indice)=>(
-                    <h2 key={indice}>{usuario.nombre}</h2>
-                ))}
-            </ul>
-        </>
-    )
-}
-
-export default Usuarios
+  return (
+    <div>
+      <input type="text" onChange={handlerChange} />
+      <button onClick={handlerClick}>Agrega a la lista</button>
+      <UserList users={users} deleteUser={deleteUser}/>
+    </div>
+  );
+};
